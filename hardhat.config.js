@@ -2,6 +2,7 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
 require("@nomiclabs/hardhat-etherscan");
+require("hardhat-tracer");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 
@@ -16,6 +17,11 @@ task("accounts", "Prints the list of accounts", async () => {
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY;
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+
+// set proxy
+const { ProxyAgent, setGlobalDispatcher } = require("undici");
+const proxyAgent = new ProxyAgent("http://127.0.0.1:4780");
+setGlobalDispatcher(proxyAgent);
 
 module.exports = {
   solidity: "0.8.7",

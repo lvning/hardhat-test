@@ -16,7 +16,7 @@ async function main() {
 
 async function main() {
   const [owner] = await ethers.getSigners();
-  const Token = await ethers.getContractFactory("Token");
+  const Token = await ethers.getContractFactory("MyToken");
   const hardhatToken = await Token.deploy();
   console.log(` hardhat token deployed to ${hardhatToken.address}`);
 
@@ -35,6 +35,7 @@ const verify = async (contractAddress, args) => {
     await run("verify:verify", {
       address: contractAddress,
       constructorArguments: args,
+      contract: "contracts/MyToken.sol:MyToken",
     });
   } catch (e) {
     if (e.message.toLowerCase().includes("already verified")) {
@@ -44,11 +45,6 @@ const verify = async (contractAddress, args) => {
     }
   }
 };
-
-// set proxy
-const { ProxyAgent, setGlobalDispatcher } = require("undici");
-const proxyAgent = new ProxyAgent("http://127.0.0.1:4780");
-setGlobalDispatcher(proxyAgent);
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
